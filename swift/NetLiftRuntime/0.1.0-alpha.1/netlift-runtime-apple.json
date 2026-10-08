@@ -1,0 +1,28 @@
+{
+  "abiVersion": 1,
+  "files": {
+    "NetLiftC": "ae8dc6ec858c3b27174384ed03499208fec292bf8fdefa6b7adb232b9024e09d",
+    "netlift.h": "2ccf368f90ae9e56858786cb16f62bc610f69c8e9a9911ef2f73ed71eb3e49ef"
+  },
+  "packageVersion": "0.1.0-alpha.1",
+  "schemaVersion": 1,
+  "supportedTargets": [
+    {
+      "architectures": [
+        "arm64"
+      ],
+      "environment": "simulator",
+      "minimumOSVersion": "15.0",
+      "platform": "ios",
+      "status": "supported-preview"
+    },
+    {
+      "architectures": [
+        "arm64"
+      ],
+      "environment": "device",
+      "platform": "ios",
+      "status": "unsupported-until-device-runtime-proof"
+    }
+  ]
+}
