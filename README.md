@@ -20,7 +20,7 @@ The Swift package preview is available at:
 ```swift
 .package(
     url: "https://github.com/Redth/netlift-sdk.git",
-    exact: "0.1.0-alpha.3"
+    exact: "0.1.0-alpha.4"
 )
 ```
 
