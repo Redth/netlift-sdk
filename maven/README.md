@@ -15,7 +15,7 @@ pluginManagement {
 
 // app/build.gradle.kts
 plugins {
-    id("io.github.redth.netlift") version "0.1.0-alpha.3"
+    id("io.github.redth.netlift") version "0.1.0-alpha.4"
 }
 ```
 
