@@ -20,7 +20,7 @@ The Swift package preview is available at:
 ```swift
 .package(
     url: "https://github.com/Redth/netlift-sdk.git",
-    exact: "0.1.0-alpha.5"
+    exact: "0.1.0-alpha.6"
 )
 ```
 
@@ -36,6 +36,7 @@ adds generated Swift DTOs, `async throws` service clients, native-owned service
 protocols, and cold `AsyncThrowingStream` projections to the target. The
 managed project must be inside the consuming Swift package.
 
-The Android preview uses Gradle plugin `0.1.0-alpha.7`, which selects runtime
-`0.1.0-alpha.2` and includes generated coroutine cancellation, native-owned
-service callbacks, and cold demand-aware Kotlin `Flow` projections.
+The Android preview uses Gradle plugin `0.1.0-alpha.8`, which selects runtime
+`0.1.0-alpha.3` and includes generated coroutine cancellation, native-owned
+service callbacks, cold demand-aware Kotlin `Flow` projections, versioned
+value adapters, typed result errors, and compatibility-aware contracts.
