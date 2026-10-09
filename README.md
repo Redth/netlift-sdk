@@ -36,7 +36,7 @@ adds generated Swift DTOs, `async throws` service clients, native-owned service
 protocols, and cold `AsyncThrowingStream` projections to the target. The
 managed project must be inside the consuming Swift package.
 
-The Android preview uses Gradle plugin `0.1.0-alpha.8`, which selects runtime
+The Android preview uses Gradle plugin `0.1.0-alpha.9`, which selects runtime
 `0.1.0-alpha.3` and includes generated coroutine cancellation, native-owned
 service callbacks, cold demand-aware Kotlin `Flow` projections, versioned
 value adapters, typed result errors, and compatibility-aware contracts.
