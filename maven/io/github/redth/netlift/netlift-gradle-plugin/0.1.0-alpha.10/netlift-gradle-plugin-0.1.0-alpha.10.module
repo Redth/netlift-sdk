@@ -1,0 +1,82 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "io.github.redth.netlift",
+    "module": "netlift-gradle-plugin",
+    "version": "0.1.0-alpha.10",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.13"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.2.20"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "netlift-gradle-plugin-0.1.0-alpha.10.jar",
+          "url": "netlift-gradle-plugin-0.1.0-alpha.10.jar",
+          "size": 207982,
+          "sha512": "000ddb5f4bac02d07d851288d01d20af06dde33e26d2195b8716f204b08e5bd3c43f79f1af721b4dd04c4d0560c6cc0557026015b5e2ac743da217b764d6768d",
+          "sha256": "124921c25b9cd21a43ce167eec9ccb3be09802850a60e987f7181cbdb9ed583c",
+          "sha1": "1c15afaeb7cf2d4641fa16956b51d16366621f20",
+          "md5": "d8686250e22f55a593367bbf3af7e3c7"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.2.20"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "netlift-gradle-plugin-0.1.0-alpha.10.jar",
+          "url": "netlift-gradle-plugin-0.1.0-alpha.10.jar",
+          "size": 207982,
+          "sha512": "000ddb5f4bac02d07d851288d01d20af06dde33e26d2195b8716f204b08e5bd3c43f79f1af721b4dd04c4d0560c6cc0557026015b5e2ac743da217b764d6768d",
+          "sha256": "124921c25b9cd21a43ce167eec9ccb3be09802850a60e987f7181cbdb9ed583c",
+          "sha1": "1c15afaeb7cf2d4641fa16956b51d16366621f20",
+          "md5": "d8686250e22f55a593367bbf3af7e3c7"
+        }
+      ]
+    }
+  ]
+}
