@@ -118,5 +118,6 @@ Apple Silicon iOS simulator. Physical Android and Apple devices have not been
 validated, and stable promotion is not complete. These artifacts are previews,
 not a production-support commitment.
 
-For implementation source and samples, see the
-[NetLift repository](https://github.com/Redth/netlift).
+For a complete Android setup-to-Hello-World walkthrough, see
+`product/samples/HelloWorld.Android/README.md` in the
+[NetLift source repository](https://github.com/Redth/netlift).

@@ -52,3 +52,6 @@ requirements include JDK 17 or later, the .NET SDK pinned by the consuming
 project with the `android` workload, Android SDK Platform 36, and NDK
 `28.2.13676358`. The verified target is an API 36 ARM64 emulator; physical
 devices have not been validated.
+
+For the Swift package setup and overall preview support status, see the
+[SDK README](../README.md).
