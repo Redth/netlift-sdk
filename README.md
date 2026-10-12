@@ -158,3 +158,11 @@ not a production-support commitment.
 For a complete Android setup-to-Hello-World walkthrough, see
 `product/samples/HelloWorld.Android/README.md` in the
 [NetLift source repository](https://github.com/Redth/netlift).
+
+## Coding-agent setup skill
+
+The portable [netlift-native-app skill](skills/netlift-native-app/SKILL.md)
+guides new and existing native/.NET project integration, public API review,
+and real runtime verification. [Installation and example prompts](skills/README.md)
+are included in this repository. It requires no bundled executables or
+EngrAIm installation.
