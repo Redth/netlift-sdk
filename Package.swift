@@ -15,13 +15,13 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "NetLiftC",
-            url: "https://redth.github.io/netlift-sdk/swift/NetLift/0.1.0-alpha.8/NetLiftRuntime.xcframework.zip",
-            checksum: "5e69f9f24c9a5cd4ae09635f5f1d7fff5106fde3b6522b018554a4fd4c935659"
+            url: "https://redth.github.io/netlift-sdk/swift/NetLift/0.1.0-alpha.9/NetLiftRuntime.xcframework.zip",
+            checksum: "4799cda6a433d2e8c7a22895c19eb5eb831f0124df59ad2b1cfd3fa4d914d129"
         ),
         .binaryTarget(
             name: "NetLiftTools",
-            url: "https://redth.github.io/netlift-sdk/swift/NetLift/0.1.0-alpha.8/netlift-swift-tools.artifactbundle.zip",
-            checksum: "b95d843cc8e6618b3d54207ca3941577dc2e3a3f2430c49eb2a17c34f892058e"
+            url: "https://redth.github.io/netlift-sdk/swift/NetLift/0.1.0-alpha.9/netlift-swift-tools.artifactbundle.zip",
+            checksum: "b937acbc7b154f7b7f7b3bb8702d286832fb4141ea042d7a792d81743698492e"
         ),
         .target(
             name: "NetLiftRuntime",

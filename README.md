@@ -8,9 +8,9 @@ service contracts.
 
 | Target | Package | Version | Distribution |
 | --- | --- | --- | --- |
-| Android | Gradle plugin `io.github.redth.netlift` | `0.1.0-alpha.12` | [Maven preview repository](https://redth.github.io/netlift-sdk/maven/) |
+| Android | Gradle plugin `io.github.redth.netlift` | `0.1.0-alpha.13` | [Maven preview repository](https://redth.github.io/netlift-sdk/maven/) |
 | Android | Runtime `io.github.redth.netlift:runtime-android` (selected by the plugin) | `0.1.0-alpha.3` | [Maven preview repository](https://redth.github.io/netlift-sdk/maven/) |
-| Apple | Swift package `NetLift` (runtime XCFramework and build-tool plugin) | `0.1.0-alpha.8` | [Swift Package](https://github.com/Redth/netlift-sdk.git) |
+| Apple | Swift package `NetLift` (runtime XCFramework and build-tool plugin) | `0.1.0-alpha.9` | [Swift Package](https://github.com/Redth/netlift-sdk.git) |
 
 Preview versions are immutable. Pin the exact version you have tested.
 
@@ -45,7 +45,7 @@ project:
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("io.github.redth.netlift") version "0.1.0-alpha.12"
+    id("io.github.redth.netlift") version "0.1.0-alpha.13"
 }
 
 netlift {
@@ -55,6 +55,12 @@ netlift {
     componentApplicationId.set("com.example.hello.component")
 }
 ```
+
+Plugin alpha.13 selects a compatible Android TFM from evaluated MSBuild
+properties and uses the evaluated assembly path. MAUI-enabled projects can
+opt into an app-specific platform-view factory; the
+[MAUI embedding sample](https://github.com/Redth/netlift/tree/HEAD/product/samples/MauiEmbedding)
+documents its workload-host requirements and validation limits.
 
 The plugin generates Kotlin DTOs and coroutine clients and builds the
 app-specific .NET Android component. It adds runtime
@@ -92,7 +98,7 @@ Add the package at its current exact preview version:
 ```swift
 .package(
     url: "https://github.com/Redth/netlift-sdk.git",
-    exact: "0.1.0-alpha.8"
+    exact: "0.1.0-alpha.9"
 )
 ```
 
