@@ -8,7 +8,7 @@ service contracts.
 
 | Target | Package | Version | Distribution |
 | --- | --- | --- | --- |
-| Android | Gradle plugin `io.github.redth.netlift` | `0.1.0-alpha.13` | [Maven preview repository](https://redth.github.io/netlift-sdk/maven/) |
+| Android | Gradle plugin `io.github.redth.netlift` | `0.1.0-alpha.14` | [Maven preview repository](https://redth.github.io/netlift-sdk/maven/) |
 | Android | Runtime `io.github.redth.netlift:runtime-android` (selected by the plugin) | `0.1.0-alpha.3` | [Maven preview repository](https://redth.github.io/netlift-sdk/maven/) |
 | Apple | Swift package `NetLift` (runtime XCFramework and build-tool plugin) | `0.1.0-alpha.9` | [Swift Package](https://github.com/Redth/netlift-sdk.git) |
 
@@ -45,7 +45,7 @@ project:
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("io.github.redth.netlift") version "0.1.0-alpha.13"
+    id("io.github.redth.netlift") version "0.1.0-alpha.14"
 }
 
 netlift {
@@ -56,7 +56,12 @@ netlift {
 }
 ```
 
-Plugin alpha.13 selects a compatible Android TFM from evaluated MSBuild
+Plugin alpha.14 fixes component restoration with empty NuGet caches and
+excludes Python bytecode caches from its bundled tooling. Its source is
+[NetLift commit `11b5516`](https://github.com/Redth/netlift/commit/11b5516de4ca1dd1262f3c4cf9f8462990991118).
+Earlier preview versions remain immutable.
+
+The plugin selects a compatible Android TFM from evaluated MSBuild
 properties and uses the evaluated assembly path. MAUI-enabled projects can
 opt into an app-specific platform-view factory; the
 [MAUI embedding sample](https://github.com/Redth/netlift/tree/HEAD/product/samples/MauiEmbedding)
