@@ -22,7 +22,7 @@ Do not replace existing build files, application delegates, dependency injection
 
 Read the current canonical [NetLift onboarding](https://github.com/Redth/netlift/blob/HEAD/README.md) and [public SDK manifest/docs](https://github.com/Redth/netlift-sdk). Resolve their default branches and inspect the actual pinned package source/metadata if examples disagree. Use immutable published packages, not local composite Gradle builds or local Swift dependencies, for consumer acceptance. Do not run downloaded scripts without inspecting them.
 
-The verified baseline at authoring is Android plugin `0.1.0-alpha.12`, Android runtime `0.1.0-alpha.3` selected by the plugin, and Swift package `0.1.0-alpha.8`. Recheck published versions and capabilities before choosing a pin; never overwrite a released version or assume source-checkout APIs are in an older package.
+The verified baseline at authoring is Android plugin `0.1.0-alpha.14`, Android runtime `0.1.0-alpha.3` selected by the plugin, and Swift package `0.1.0-alpha.9`. Plugin alpha.14 selects matching mobile TFMs, optionally emits the Android MAUI view factory seam, and restores portable-library runtime packs with empty NuGet caches. Recheck published versions and capabilities before choosing a pin; never overwrite a released version or assume source-checkout APIs are in an older package.
 
 ## 2. Evaluate the managed public API
 
@@ -35,13 +35,13 @@ Build the existing portable project first. Inspect only the reachable public bou
 | Inputs | Exactly one non-null request DTO and at most one trailing `CancellationToken`. Group scalar/multiple parameters into a request record. |
 | Results | A non-null DTO, not a bare scalar or nullable result. Wrap values or no-content operations in a meaningful result DTO. |
 | DTOs | Public readable properties, explicit nullability, simple value shapes, no indexers or arbitrary platform objects. Start with records. |
-| Field types | Booleans, integer/floating scalars, strings, enums, nested DTOs, and supported adapters (`Guid`, `DateTimeOffset`, `byte[]`, `Uri`). Confirm actual generated support rather than assuming all CLR types work. |
+| Field types | Booleans, integer/floating scalars, strings, enums, and supported adapters (`Guid`, `DateTimeOffset`, `byte[]`, `Uri`). The current initial JSON codec rejects nested DTO fields; keep request/response shapes flat unless the exact selected compiler profile proves otherwise. Confirm generated support rather than assuming all CLR types work. |
 | Collections | The current profile supports scalar/enum lists. Dictionaries, nested collections, lists of DTOs/adapters, and nullable elements need a narrower boundary or confirmed newer support. |
 | Naming | Short, unambiguous service/DTO names across namespaces; inspect generated method names after `Async` removal and initial casing. Avoid overloads or name collisions that project identically. |
 | Hosting | Exactly one public constructible implementation in the rooted assembly. The simple path needs a public parameterless constructor; supported native-owned service proxies may be constructor parameters when separately rooted. Arbitrary app DI dependencies are not automatically supplied. |
 | Cancellation | Pass the token through real work; rethrow native cancellation rather than reporting it as a successful default result. |
 
-Recommend a thin facade around existing logic before changing existing public signatures, nullability, names, or constructor semantics. Seek approval for changes that affect existing consumers or behavior. Do not publish speculative API improvements as facts. Validate proposed shapes with the actual generator; its diagnostics are authoritative. If shared code depends on MAUI UI, desktop-only APIs, or platform-specific assemblies, isolate the portable business layer instead of embedding a second UI stack.
+Recommend a thin facade around existing logic before changing existing public signatures, nullability, names, or constructor semantics. Seek approval for changes that affect existing consumers or behavior. Do not publish speculative API improvements as facts. Validate proposed shapes with the actual generator; its diagnostics are authoritative. Prefer isolating the portable business layer. If optional MAUI views are explicitly requested, use the workload-host embedding pattern below rather than replacing native app ownership. Desktop-only APIs still require a compatible target or isolation.
 
 For a new service, create an ordinary `net10.0` library with nullable references and implicit usings. It needs no NetLift package reference or attributes. Use the README's greeting DTO/interface/implementation as the first smoke test, then adapt names and behavior to the task.
 
@@ -84,11 +84,170 @@ Only pass `streamTransport:` when the host conforms to it. Missing or duplicate 
 
 **The Swift package does not start .NET or automatically embed the managed component.** A Swift in-memory transport verifies clients, not managed execution. Label it as a preview/test and never present it as calling C#.
 
-For real iOS execution, inspect the current source-owned `product/apple/build_component.py` and integration sample. They build the app-specific workload registrar/R2R/CoreCLR closure and link a Swift-owned simulator executable. The authoring baseline supports only Apple Silicon iOS simulators and expects Xcode at `/Applications/Xcode_26.6.app`; physical devices, Intel simulators, and a macOS managed host are not validated. The package's deployment minimums do not imply those runtime targets are supported.
+For real iOS execution, choose the host path that fits the contract:
 
-Adapt the existing app's bootstrap/transport and link inputs explicitly; package installation alone is insufficient. Retain SwiftUI/UIKit lifecycle ownership. Use the tested host transport's operation/cancellation and error-envelope handling, rather than inventing a synchronous UI-thread bridge. If the task cannot achieve real hosting on its requested target, stop at the actual blocker and state it; do not substitute an in-memory demo silently.
+- Read the README's workload-host vs NativeAOT comparison before choosing.
+  Both preserve native UI ownership. "Non-host" means no workload-host
+  bootstrap, not no managed runtime support. For NativeAOT, evaluate the
+  reachable implementation and dependency closure, including service-owned
+  JSON serialization and reflection; generated dispatcher metadata alone
+  does not prove AOT compatibility. Enable `IsAotCompatible` for diagnostics
+  and validate actual target publication. Do not suppress trim/AOT warnings
+  or promise size/startup improvements without measurements. The workload
+  host does not require NativeAOT-compatible library code, but still has
+  trimming, runtime, and iOS platform constraints.
+- For portable contracts without managed-to-native callbacks or `UIView`
+  projection, inspect `product/apple/build_native_aot.py` and
+  `product/apple/samples/NativeAotHelloWorld`. The checked-in Xcode target
+  runs its managed build phase automatically as part of a normal app build,
+  generating Swift sources and publishing the selected arm64 platform slice.
+  The standalone builder can publish simulator/device frameworks and package
+  an XCFramework. The checked-in sample verifies unary calls, pull-based
+  streams, and cancellation by launching a Swift-owned app on an Apple
+  Silicon simulator. The integration requires .NET 11 preview and Xcode;
+  standalone builder targets require .NET 10+. Device slices build but
+  physical-device execution is not verified. The bridge rejects
+  managed-to-native callbacks.
+- For callback services and the existing Apple `UIView` peer adapter, inspect
+  `product/apple/samples/OrdersHost`, `product/apple/NetLiftWorkload.yml`,
+  and `product/apple/xcode_workload.py`. Their normal Xcode build generates
+  contracts, builds the workload component, supplies its native link inputs,
+  and embeds its payload before signing. Configure the managed project,
+  contract roots, and module in the workload `netlift.json`; `managedFramework`
+  can override ambiguous selection. The integration uses Xcode's selected
+  developer directory. It accepts Debug ARM64 iOS simulators and explicitly
+  rejects Release, physical-device, and Intel-simulator targets.
 
-Use a fresh dedicated ignored output such as repository-root `.artifacts/<component>` for the source component builder, inspect an existing output before replacement, and do not put generated component projects under contributor directories whose inherited MSBuild settings can change their behavior.
+The package's deployment minimums do not imply those runtime targets are
+supported. For an existing Xcode app using NativeAOT, add the managed-build
+and framework-embed phases, generated-source references, and link settings
+from the checked-in project; configure the managed project, contract roots,
+module, and repository path in target build settings. After this one-time
+integration, ordinary Xcode builds build the selected managed slice. A
+SwiftPM package alone cannot add a generated binary to an Xcode app's link
+and embed phases. For workload hosting, copy the shared template's
+pre-build/embed phases, generated Swift references, framework search path,
+and response-file linker setting into the existing target. Set
+`NETLIFT_REPOSITORY_ROOT` and optionally `NETLIFT_CONFIG`, and retain/adapt
+the native entry point and delegate. For either host path, ordinary native
+builds must own managed builds after this one-time wiring; do not require a
+separate host-building command or manually copy runtime files.
+
+Retain SwiftUI/UIKit lifecycle ownership. For the workload-host path, use its
+tested operation/cancellation and error-envelope handling rather than
+inventing a synchronous UI-thread bridge. For NativeAOT, use the generated
+transport and inspect the produced framework/header and linker integration.
+If the task cannot achieve real hosting on its requested target, stop at the
+actual blocker and state it; do not substitute an in-memory demo silently.
+
+Use the Xcode integration's ignored per-target `Build/` outputs. For standalone
+engineering audits, use dedicated ignored `.artifacts/<component>` output
+and inspect it before replacement. Generated projects may inherit repository
+MSBuild settings; preserve their diagnostics rather than suppressing them.
+
+## Optional mobile TFMs, MAUI services, and views
+
+Inspect `product/samples/MauiEmbedding` before adding MAUI to a native app.
+Its `Managed/MauiEmbedding.csproj` targets `net11.0-ios;net11.0-android`,
+sets `UseMaui`, and references the workload's `Microsoft.Maui.Controls`
+version. Keep MAUI in a multi-targeted **library**, not a second application:
+the existing native app owns its process, entry point, navigation, and UI.
+Use SDK/workload versions compatible with the consuming project; the sample's
+.NET 11 target is not a requirement to migrate an existing compatible app.
+
+### Resolve the mobile TFM
+
+The source builders evaluate the linked project through MSBuild, select its
+matching mobile TFM ahead of a portable TFM, and use the evaluated
+`TargetPath`. An ambiguous selection must be explicit:
+`managedFramework` in `netlift.json` for Apple or
+`contractTargetFramework` in Gradle for Android. Build the host against the
+same selected TFM. A project with `UseMaui=true` enables MAUI for the
+generated host and carries its evaluated `MauiVersion`; do not hand-edit
+generated internal workload projects to add MAUI.
+
+Android framework selection and `platformViewFactory` are supported by the
+published plugin alpha.14. Apple MAUI hosting is wired into the source-owned
+Xcode sample; it is **not** provided by the Swift package alone. Do not
+present source-checkout workload hosting as a published Swift-package feature.
+
+### Build the Apple workload host as part of Xcode
+
+The workload host is included in the **native target's normal build**. In
+`netlift.json`, select the managed project, service roots, and optional view
+factory. Include `product/apple/NetLiftWorkload.yml` from the target's
+`project.yml` as in the MAUI and Orders samples; keep
+`relativePaths: false` so generated outputs resolve beneath the app's
+`SRCROOT`. Set `NETLIFT_REPOSITORY_ROOT` and the bridging header/build
+settings on that target.
+
+Xcode runs `product/apple/xcode_workload.py build` in its pre-build phase.
+That phase builds the app-specific managed workload closure, generates the
+Swift bridge, and supplies the runtime/native linker response to **Xcode's
+own app executable**. Its post-build phase runs `xcode_workload.py embed` to
+embed the managed payload before Xcode signs the app. This is an internal
+managed-component build, not a separate host app to build, copy, or launch.
+Do not instruct app users to run `build_component.py` or `xcode_workload.py`
+manually before every build. After the one-time target wiring, ordinary
+`xcodebuild`/Xcode Run also picks up C# changes. The checked-in Xcode project
+is generated from `project.yml`; XcodeGen is only needed when changing that
+project definition.
+
+The integration is source-checkout-owned and explicitly supports Debug,
+ARM64 iOS Simulator (deployment target iOS 15 or later). It fails explicitly
+for Release, physical-device, and Intel/multi-architecture simulator builds.
+Do not imply the shared build template, current signatures, or simulator
+validation make those configurations supported. For an existing Xcode app,
+wire the shared template's generated Swift sources, framework search/link
+settings, managed build phase, embed phase, and native bootstrap **once**;
+preserve its app entry point and delegate. NativeAOT has its own build/embed
+integration and support rules; do not combine the two host paths.
+
+### Call MAUI Essentials from the managed service
+
+Keep service DTOs flat and call MAUI Essentials in the rooted C# service;
+Swift/Kotlin continue using native screens and the generated client. The sample
+returns `DeviceInfo.Current` metadata with its greeting and demonstrates
+`SecureStorage.Default` get/set/remove plus `Clipboard.Default` read/copy.
+Dispatch clipboard work through `MainThread` and surface service errors in
+the native UI; never log entered secure values or fall back to success when
+a platform call fails. Use demo text, not real credentials. Clipboard content
+is not secure storage; Android limits background clipboard reads and iOS may
+ask before reading content copied by another app.
+
+Only add native host configuration for services the app actually uses.
+Secure storage requires the app's native identity: the iOS sample declares
+its Keychain access group in `SwiftUI/Entitlements.plist`; its Android sample
+includes MAUI's `androidx.security:security-crypto` dependency. Plan Android
+backup/restore so encrypted preferences are not restored without their
+Keystore key. The sample disables backup for its demo; do not disable backup
+in another app without assessing that app's requirements.
+
+The optional static `platformViewFactory` receives/returns `UIKit.UIView` or
+`Android.Views.View` bindings and provides `RoundTrip`, `Create`, `Release`,
+and `LiveCount`. Keep native views out of JSON DTOs. Use one `MauiApp` with
+`UseMauiEmbeddedApp`; create the correct context and convert with
+`ToPlatformEmbedded` / `ToPlatform`, not a guessed `ToPlatformView` API.
+A native Swift delegate needs a managed binding that implements
+`IUIApplicationDelegate`. Android view creation uses an Activity context;
+the native Gradle app supplies compatible AppCompat/Material dependencies,
+while the component includes MAUI Java helpers.
+
+Host views with SwiftUI `UIViewRepresentable` / Compose `AndroidView`. Run
+creation, borrowing, and release on the UI thread. Remove the child from its
+native parent before disconnecting/releasing the MAUI handler, exactly once,
+in `dismantleUIView` / `onRelease`. A Kotlin `ComposeView` can cross as an
+Android `View`; a composable lambda cannot.
+
+The sample demonstrates both service and view paths. Its opt-in
+Essentials-acceptance launch writes demo text to the simulator/emulator
+clipboard; run it only with a disposable test device or after confirming it is
+safe to replace that test device's clipboard. Normal app launch does not read
+or overwrite the clipboard. Verify real managed results, native identity,
+actual rendering, managed label updates, GC survival, and release/recreate
+cycles. Do not imply full MAUI window features, arbitrary native-object DTOs,
+Android resource-ID reconciliation, R8/release, or physical-device support.
+Investigate window-scoped contexts and lifetimes separately if requested.
 
 ## 6. Verify the requested outcome and hand off
 
@@ -97,8 +256,8 @@ Run the smallest build/test commands covering the change, then the native consum
 - Build the .NET library and retain its existing tests. Inspect generated DTO fields, initializer order, method names, and stable IDs instead of guessing declarations or editing generated files.
 - Android: build the public-feed APK with the app wrapper, install on an explicitly selected compatible emulator/device, cold-launch, and confirm a value produced by the real C# service in the UI/logs. Relaunch to verify one-time startup works per process.
 - Swift projection: build/run the public-package consumer. Verify missing/duplicate installation errors, direct injection, and one default client call. State whether its transport is real or in-memory.
-- iOS hosting: build/audit the managed component, install on an explicitly selected supported simulator, launch, and confirm a managed result. Generation or an in-memory Swift response is not a substitute.
-- If callbacks or streams are in scope, verify registration/revoke, lazy opening, one read per demand, termination, and cancellation. Do not add these features to a greeting-only request just to run more tests.
+- iOS hosting: build/audit the selected NativeAOT framework or workload component, install on an explicitly selected supported simulator, launch, and confirm a managed result. Generation or an in-memory Swift response is not a substitute. If streams or cancellation are in scope, exercise them through the selected host path.
+- If callbacks are in scope, use the workload-host path and verify registration/revoke; the NativeAOT bridge rejects managed-to-native callbacks. If streams are in scope, verify lazy opening, one read per demand, termination, and cancellation. Do not add these features to a greeting-only request just to run more tests.
 - For new package compatibility or first-use acceptance, use fresh dependency caches and only public feeds. Keep local build wiring out of the final consumer.
 
 Keep generated output/cache/scratch work ignored and scoped to this task; clean up temporary probes, not user data. Never push branches, publish packages, create PRs, change signing identities, or migrate an existing public API without explicit authorization. Deliver only requested project files, necessary tests, and concise setup/run notes. Report exact package pins, what really executed, and any platform/toolchain blocker without calling a preview a completed runtime integration.
