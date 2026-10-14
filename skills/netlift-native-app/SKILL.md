@@ -22,7 +22,7 @@ Do not replace existing build files, application delegates, dependency injection
 
 Read the current canonical [NetLift onboarding](https://github.com/Redth/netlift/blob/HEAD/README.md) and [public SDK manifest/docs](https://github.com/Redth/netlift-sdk). Resolve their default branches and inspect the actual pinned package source/metadata if examples disagree. Use immutable published packages, not local composite Gradle builds or local Swift dependencies, for consumer acceptance. Do not run downloaded scripts without inspecting them.
 
-The verified baseline at authoring is Android plugin `0.1.0-alpha.14`, Android runtime `0.1.0-alpha.3` selected by the plugin, and Swift package `0.1.0-alpha.9`. Plugin alpha.14 selects matching mobile TFMs, optionally emits the Android MAUI view factory seam, and restores portable-library runtime packs with empty NuGet caches. Recheck published versions and capabilities before choosing a pin; never overwrite a released version or assume source-checkout APIs are in an older package.
+The current verified preview is Android plugin `0.1.0-alpha.15`, Android runtime `0.1.0-alpha.3` selected by the plugin, and Swift package `0.1.0-alpha.10`. Plugin alpha.15 selects matching mobile TFMs, optionally emits the Android MAUI view factory seam, and retains the portable-library runtime pack restoration fix for empty NuGet caches. Recheck published versions and capabilities before choosing a pin; never overwrite a released version or assume source-checkout APIs are in an older package.
 
 ## 2. Evaluate the managed public API
 
