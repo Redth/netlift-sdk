@@ -64,7 +64,7 @@ Earlier preview versions remain immutable.
 The plugin selects a compatible Android TFM from evaluated MSBuild
 properties and uses the evaluated assembly path. MAUI-enabled projects can
 opt into an app-specific platform-view factory; the
-[MAUI embedding sample](https://github.com/Redth/netlift/tree/HEAD/product/samples/MauiEmbedding)
+[MAUI embedding sample](https://github.com/Redth/netlift/tree/HEAD/samples/MauiEmbedding)
 documents its workload-host requirements and validation limits.
 
 The plugin generates Kotlin DTOs and coroutine clients and builds the
