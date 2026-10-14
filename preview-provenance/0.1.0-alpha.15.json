@@ -1,0 +1,15 @@
+{
+  "sourceRepository": "https://github.com/Redth/netlift",
+  "sourceCommit": "28f288fe9fe71bca926d574d96711616549c423f",
+  "versions": {
+    "gradlePlugin": "0.1.0-alpha.15",
+    "androidRuntimeUnchanged": "0.1.0-alpha.3",
+    "swiftPackage": "0.1.0-alpha.10"
+  },
+  "sha256": {
+    "maven/io/github/redth/netlift/netlift-gradle-plugin/0.1.0-alpha.15/netlift-gradle-plugin-0.1.0-alpha.15.jar": "620a1524dab7517fc7c0a5038f6d869dd9bcdaa9a0ab37fc352ee25d0e899192",
+    "maven/io/github/redth/netlift/io.github.redth.netlift.gradle.plugin/0.1.0-alpha.15/io.github.redth.netlift.gradle.plugin-0.1.0-alpha.15.pom": "9959c12657de9de454e0609a5fc20dcf2da82f188220463c226a6e1ecc8a7ff4",
+    "swift/NetLift/0.1.0-alpha.10/NetLiftRuntime.xcframework.zip": "418dee36cca920e5d236aaa6eeb4eb02782b5babf6d6ae851bd22730a7ee436b",
+    "swift/NetLift/0.1.0-alpha.10/netlift-swift-tools.artifactbundle.zip": "397998dc50aeee6cc864e28ae1679e93f48d7fdbbadca800fd2edf33795c1ea6"
+  }
+}

@@ -8,9 +8,9 @@ service contracts.
 
 | Target | Package | Version | Distribution |
 | --- | --- | --- | --- |
-| Android | Gradle plugin `io.github.redth.netlift` | `0.1.0-alpha.14` | [Maven preview repository](https://redth.github.io/netlift-sdk/maven/) |
+| Android | Gradle plugin `io.github.redth.netlift` | `0.1.0-alpha.15` | [Maven preview repository](https://redth.github.io/netlift-sdk/maven/) |
 | Android | Runtime `io.github.redth.netlift:runtime-android` (selected by the plugin) | `0.1.0-alpha.3` | [Maven preview repository](https://redth.github.io/netlift-sdk/maven/) |
-| Apple | Swift package `NetLift` (runtime XCFramework and build-tool plugin) | `0.1.0-alpha.9` | [Swift Package](https://github.com/Redth/netlift-sdk.git) |
+| Apple | Swift package `NetLift` (runtime XCFramework and build-tool plugin) | `0.1.0-alpha.10` | [Swift Package](https://github.com/Redth/netlift-sdk.git) |
 
 Preview versions are immutable. Pin the exact version you have tested.
 
@@ -45,7 +45,7 @@ project:
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("io.github.redth.netlift") version "0.1.0-alpha.14"
+    id("io.github.redth.netlift") version "0.1.0-alpha.15"
 }
 
 netlift {
@@ -56,9 +56,9 @@ netlift {
 }
 ```
 
-Plugin alpha.14 fixes component restoration with empty NuGet caches and
-excludes Python bytecode caches from its bundled tooling. Its source is
-[NetLift commit `11b5516`](https://github.com/Redth/netlift/commit/11b5516de4ca1dd1262f3c4cf9f8462990991118).
+Plugin alpha.15 packages the canonical root-layout tooling and retains
+the alpha.14 empty-cache restoration fix. Its source is
+[NetLift commit `28f288f`](https://github.com/Redth/netlift/commit/28f288fe9fe71bca926d574d96711616549c423f).
 Earlier preview versions remain immutable.
 
 The plugin selects a compatible Android TFM from evaluated MSBuild
@@ -103,7 +103,7 @@ Add the package at its current exact preview version:
 ```swift
 .package(
     url: "https://github.com/Redth/netlift-sdk.git",
-    exact: "0.1.0-alpha.9"
+    exact: "0.1.0-alpha.10"
 )
 ```
 
@@ -167,7 +167,7 @@ validated, and stable promotion is not complete. These artifacts are previews,
 not a production-support commitment.
 
 For a complete Android setup-to-Hello-World walkthrough, see
-`product/samples/HelloWorld.Android/README.md` in the
+`samples/HelloWorld.Android/README.md` in the
 [NetLift source repository](https://github.com/Redth/netlift).
 
 ## Coding-agent setup skill
